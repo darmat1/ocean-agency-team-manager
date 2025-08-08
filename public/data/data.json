@@ -1,0 +1,172 @@
+[
+  {
+    "id": "user-1",
+    "name": "Alice Johnson",
+    "avatar": "https://i.pravatar.cc/150?u=user-1",
+    "role": "Team Lead",
+    "department": "Technical",
+    "status": "active",
+    "phone": "+1 (555) 123-4567",
+    "telegram": "@alicej",
+    "tasks": [
+      { "id": "task-1", "title": "Setup project repository", "status": "Done" },
+      { "id": "task-2", "title": "Define project architecture", "status": "In Progress" },
+      { "id": "task-3", "title": "Onboard new developers", "status": "To Do" }
+    ]
+  },
+  {
+    "id": "user-2",
+    "name": "Bob Smith",
+    "avatar": "https://i.pravatar.cc/150?u=user-2",
+    "role": "Senior Frontend Developer",
+    "department": "Technical",
+    "status": "active",
+    "phone": "+1 (555) 234-5678",
+    "telegram": "@bobsmithdev",
+    "tasks": [
+      { "id": "task-4", "title": "Implement Team List page UI", "status": "In Progress" },
+      { "id": "task-5", "title": "Create custom hooks for data fetching", "status": "In Progress" },
+      { "id": "task-6", "title": "Write unit tests for API module", "status": "To Do" }
+    ]
+  },
+  {
+    "id": "user-3",
+    "name": "Charlie Brown",
+    "avatar": "https://i.pravatar.cc/150?u=user-3",
+    "role": "Sales Manager",
+    "department": "Sales",
+    "status": "active",
+    "phone": "+1 (555) 345-6789",
+    "telegram": "@charlieb",
+    "tasks": [
+      { "id": "task-7", "title": "Contact Q4 leads", "status": "Done" },
+      { "id": "task-8", "title": "Prepare weekly sales report", "status": "In Progress" }
+    ]
+  },
+  {
+    "id": "user-4",
+    "name": "Diana Prince",
+    "avatar": "https://i.pravatar.cc/150?u=user-4",
+    "role": "Chief Financial Officer",
+    "department": "Finance",
+    "status": "active",
+    "phone": "+1 (555) 456-7890",
+    "telegram": "@diana.prince",
+    "tasks": [
+      { "id": "task-9", "title": "Process monthly invoices", "status": "Done" },
+      { "id": "task-10", "title": "Prepare payroll for October", "status": "Done" },
+      { "id": "task-11", "title": "Audit Q3 expenses", "status": "To Do" }
+    ]
+  },
+  {
+    "id": "user-5",
+    "name": "Ethan Hunt",
+    "avatar": "https://i.pravatar.cc/150?u=user-5",
+    "role": "Backend Developer",
+    "department": "Technical",
+    "status": "active",
+    "phone": "+1 (555) 567-8901",
+    "telegram": "@ethanhunt",
+    "tasks": [
+      { "id": "task-12", "title": "Develop user authentication API", "status": "In Progress" },
+      { "id": "task-13", "title": "Optimize database queries", "status": "To Do" }
+    ]
+  },
+  {
+    "id": "user-6",
+    "name": "Fiona Glenanne",
+    "avatar": "https://i.pravatar.cc/150?u=user-6",
+    "role": "QA Engineer",
+    "department": "Technical",
+    "status": "inactive",
+    "phone": "+1 (555) 678-9012",
+    "telegram": "@fionaglen",
+    "tasks": [
+      { "id": "task-14", "title": "Write e2e tests for login flow", "status": "Done" },
+      { "id": "task-15", "title": "Perform regression testing for v1.2", "status": "Done" }
+    ]
+  },
+  {
+    "id": "user-7",
+    "name": "George Costanza",
+    "avatar": "https://i.pravatar.cc/150?u=user-7",
+    "role": "Sales Representative",
+    "department": "Sales",
+    "status": "active",
+    "phone": "+1 (555) 789-0123",
+    "telegram": "@georgieboy",
+    "tasks": [
+      { "id": "task-16", "title": "Follow up with new clients", "status": "In Progress" },
+      { "id": "task-17", "title": "Demo product to potential customers", "status": "To Do" },
+      { "id": "task-18", "title": "Update CRM records", "status": "To Do" }
+    ]
+  },
+  {
+    "id": "user-8",
+    "name": "Hannah Abbott",
+    "avatar": "https://i.pravatar.cc/150?u=user-8",
+    "role": "Accountant",
+    "department": "Finance",
+    "status": "active",
+    "phone": "+1 (555) 890-1234",
+    "telegram": "@hannah.abbott",
+    "tasks": [
+      { "id": "task-19", "title": "Reconcile bank statements", "status": "In Progress" }
+    ]
+  },
+  {
+    "id": "user-9",
+    "name": "Ian Malcolm",
+    "avatar": "https://i.pravatar.cc/150?u=user-9",
+    "role": "DevOps Engineer",
+    "department": "Technical",
+    "status": "active",
+    "phone": "+1 (555) 901-2345",
+    "telegram": "@ian.chaos",
+    "tasks": [
+      { "id": "task-20", "title": "Configure CI/CD pipeline", "status": "Done" },
+      { "id": "task-21", "title": "Monitor production server performance", "status": "In Progress" }
+    ]
+  },
+  {
+    "id": "user-10",
+    "name": "Jane Doe",
+    "avatar": "https://i.pravatar.cc/150?u=user-10",
+    "role": "UI/UX Designer",
+    "department": "Technical",
+    "status": "active",
+    "phone": "+1 (555) 012-3456",
+    "telegram": "@janedoe",
+    "tasks": [
+      { "id": "task-22", "title": "Create mockups for profile page", "status": "Done" },
+      { "id": "task-23", "title": "Design a new logo concept", "status": "To Do" }
+    ]
+  },
+  {
+    "id": "user-11",
+    "name": "Kevin McCallister",
+    "avatar": "https://i.pravatar.cc/150?u=user-11",
+    "role": "Junior Sales Associate",
+    "department": "Sales",
+    "status": "inactive",
+    "phone": "+1 (555) 111-2222",
+    "telegram": "@kevin_sales",
+    "tasks": [
+      { "id": "task-24", "title": "Cold call potential leads", "status": "Done" }
+    ]
+  },
+  {
+    "id": "user-12",
+    "name": "Laura Palmer",
+    "avatar": "https://i.pravatar.cc/150?u=user-12",
+    "role": "Financial Analyst",
+    "department": "Finance",
+    "status": "active",
+    "phone": "+1 (555) 222-3333",
+    "telegram": "@laurap",
+    "tasks": [
+      { "id": "task-25", "title": "Analyze Q3 financial data", "status": "In Progress" },
+      { "id": "task-26", "title": "Create forecast for Q1 2025", "status": "To Do" }
+    ]
+  }
+]
