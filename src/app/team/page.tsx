@@ -3,7 +3,10 @@
 import { SortIcon, SortIconAsc } from '@/components/icons/Sort';
 import { TeamTableRow } from '@/components/Team/TeamTableRow';
 import { useTeam } from '@/hooks/useTeam';
+import { TeamMember } from '@/lib/types';
+import { Input, Select } from 'antd';
 import { useMemo, useState } from 'react';
+import { useMediaQuery } from 'react-responsive';
 
 type SortableKeys = 'name' | 'role' | 'department';
 
@@ -14,28 +17,41 @@ export default function TeamPage() {
         direction: 'ascending' | 'descending';
     }>({ key: null, direction: 'ascending' });
 
-    
+    const [searchTerm, setSearchTerm] = useState('');
+    const [departmentFilter, setDepartmentFilter] = useState<string | null>(null);
+    const isDesktop = useMediaQuery({ query: '(min-width: 768px)' });
 
-    const sortedMembers = useMemo(() => {
-        const sortableItems = [...members];
-        const { key, direction } = sortConfig;
-        if (!key) {
-            return sortableItems;
+    const uniqueDepartments = useMemo(() => {
+        if (!members) return [];
+        const departments = new Set(members.map(member => member.department));
+        return Array.from(departments); 
+    }, [members]);
+
+    const filteredAndSortedMembers = useMemo(() => {
+        let filteredItems: TeamMember[] = [...members];
+        if (searchTerm) {
+            filteredItems = filteredItems.filter(member =>
+                member.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
         }
-        sortableItems.sort((a, b) => {
-            const valueA = a[key];
-            const valueB = b[key];
+        if (departmentFilter) {
+            filteredItems = filteredItems.filter(member =>
+                member.department === departmentFilter
+            );
+        }
+        const { key, direction } = sortConfig;
+        if (key) {
+            filteredItems.sort((a, b) => {
+                const valueA = a[key];
+                const valueB = b[key];
+                if (valueA < valueB) return direction === 'ascending' ? -1 : 1;
+                if (valueA > valueB) return direction === 'ascending' ? 1 : -1;
+                return 0;
+            });
+        }
 
-            if (valueA < valueB) {
-                return direction === 'ascending' ? -1 : 1;
-            }
-            if (valueA > valueB) {
-                return direction === 'ascending' ? 1 : -1;
-            }
-            return 0;
-        });
-        return sortableItems;
-    }, [members, sortConfig]);
+        return filteredItems;
+    }, [members, searchTerm, departmentFilter, sortConfig]);
 
     const requestSort = (key: SortableKeys) => {
         let direction: 'ascending' | 'descending' = 'ascending';
@@ -73,7 +89,31 @@ export default function TeamPage() {
     return (
         <main className="p-4 md:p-8">
             <h1 className="text-2xl font-bold mb-6">Team Members</h1>
-            {members.length === 0 ? (
+            <div className="flex items-center gap-2 md:gap-4 flex-wrap mb-3 w-full md:w-auto">
+                <Input.Search
+                    placeholder="Search by name"
+                    className='w-full md:w-auto'
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    style={{ width: isDesktop ? 240 : '100%' }}
+                    allowClear
+                />
+                <Select
+                    className='w-full md:w-auto'
+                    placeholder="Filter by Department"
+                    value={departmentFilter}
+                    onChange={(value) => setDepartmentFilter(value)}
+                    style={{ width: isDesktop ? 200 : '100%' }}
+                    allowClear
+                >
+                    {uniqueDepartments.map(dept => (
+                        <Select.Option key={dept} value={dept}>
+                            {dept}
+                        </Select.Option>
+                    ))}
+                </Select>
+            </div>
+            {filteredAndSortedMembers.length === 0 ? (
                 <p>No team members found.</p>
             ) : (
                 <div className="md:border md:border-gray-200 md:rounded-lg md:overflow-hidden md:shadow-sm">
@@ -99,7 +139,7 @@ export default function TeamPage() {
                         </thead>
 
                         <tbody>
-                            {sortedMembers.map((member) => (
+                            {filteredAndSortedMembers.map((member: TeamMember) => (
                                 <TeamTableRow key={member.id} member={member} />
                             ))}
                         </tbody>
