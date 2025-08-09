@@ -126,7 +126,7 @@ export default function TeamPage() {
                                     </button></th>
                                 <th className="p-4">
                                     <button onClick={() => requestSort('role')} className="sort-button cursor-pointer flex items-center gap-1">
-                                        Role{getSortIcon('role')}
+                                        Role {getSortIcon('role')}
                                     </button>
                                 </th>
                                 <th className="p-4">
