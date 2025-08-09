@@ -5,7 +5,7 @@ import { TeamTableRow } from '@/components/Team/TeamTableRow';
 import { useTeam } from '@/hooks/useTeam';
 import { TeamMember } from '@/lib/types';
 import { Input, Select } from 'antd';
-import { useMemo, useState } from 'react';
+import { ChangeEvent, useMemo, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 
 type SortableKeys = 'name' | 'role' | 'department';
@@ -29,17 +29,21 @@ export default function TeamPage() {
 
     const filteredAndSortedMembers = useMemo(() => {
         let filteredItems: TeamMember[] = [...members];
+
         if (searchTerm) {
             filteredItems = filteredItems.filter(member =>
                 member.name.toLowerCase().includes(searchTerm.toLowerCase())
             );
         }
+        
         if (departmentFilter) {
             filteredItems = filteredItems.filter(member =>
                 member.department === departmentFilter
             );
         }
+
         const { key, direction } = sortConfig;
+
         if (key) {
             filteredItems.sort((a, b) => {
                 const valueA = a[key];
@@ -94,7 +98,7 @@ export default function TeamPage() {
                     placeholder="Search by name"
                     className='w-full md:w-auto'
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
                     style={{ width: isDesktop ? 240 : '100%' }}
                     allowClear
                 />
@@ -102,7 +106,7 @@ export default function TeamPage() {
                     className='w-full md:w-auto'
                     placeholder="Filter by Department"
                     value={departmentFilter}
-                    onChange={(value) => setDepartmentFilter(value)}
+                    onChange={(value: string) => setDepartmentFilter(value)}
                     style={{ width: isDesktop ? 200 : '100%' }}
                     allowClear
                 >
