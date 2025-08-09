@@ -11,10 +11,23 @@
   --font-sans: var(--font-inter);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+table {
+  @apply w-full border border-gray-500 rounded-lg overflow-hidden shadow-sm;
+}
+
+@layer components {
+
+  .responsive-cell {
+    &::before {
+      content: attr(data-label);
+      @apply float-left font-semibold mr-4;
+    }
+
+    @media (min-width: theme('screens.md')) {
+      &::before {
+        @apply hidden;
+      }
+    }
   }
 }
 

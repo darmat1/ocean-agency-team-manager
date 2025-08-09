@@ -7,7 +7,7 @@ type Props = {
 };
 
 const TeamMemberPage = async ({ params }: Props) => {
-  const { id } = params;
+  const { id } = await params;
 
   const members = teamData as TeamMember[];
   const member = members.find((m) => String(m.id) === id);

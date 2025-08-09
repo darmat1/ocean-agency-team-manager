@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import StyledComponentsRegistry from '@/lib/AntdRegistry';
+import { TeamProvider } from "@/context/TeamProvider";
 
-const inter = Inter({  variable: "--font-inter", subsets: ["latin"] });
+const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Team Dashboard",
@@ -20,7 +21,11 @@ export default function RootLayout({
       <body
         className={`${inter.variable} antialiased`}
       >
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        <StyledComponentsRegistry>
+          <TeamProvider>
+            {children}
+          </TeamProvider>
+        </StyledComponentsRegistry>
       </body>
     </html>
   );
