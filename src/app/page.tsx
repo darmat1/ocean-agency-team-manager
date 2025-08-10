@@ -1,14 +1,22 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Card, Statistic, List, Avatar, Spin } from 'antd';
 import { UserOutlined, TeamOutlined, SyncOutlined } from '@ant-design/icons';
 import { DepartmentChart, TaskStatusChart } from '@/components/Dashboard';
 import Link from 'next/link';
 import { useTeam } from '@/hooks/useTeam';
+import { useNotification } from '@/hooks/useNotification';
 
 export default function HomePage() {
-  const { members, loading } = useTeam();
+  const { members, loading, error } = useTeam();
+  const { addNotification } = useNotification();
+
+  useEffect(() => {
+    if (error) {
+      addNotification(`Failed to load data: ${error}`, 'error');
+    }
+  }, [error, addNotification]);
 
   const stats = useMemo(() => {
     if (!members.length) return { total: 0, active: 0, inProgress: 0 };

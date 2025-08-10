@@ -6,6 +6,7 @@ import { HomeOutlined, TeamOutlined, RocketOutlined, CloseOutlined, ReloadOutlin
 import { FC } from 'react';
 import { useTeam } from '@/hooks/useTeam';
 import { Button } from 'antd';
+import { useNotification } from '@/hooks/useNotification';
 
 const navLinks = [
     { name: 'Dashboard', href: '/', icon: <HomeOutlined /> },
@@ -20,9 +21,11 @@ interface SidebarProps {
 export const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
     const pathname = usePathname();
     const { isDataModified, resetToDefault } = useTeam();
+    const { addNotification } = useNotification();
 
     const handleReset = () => {
         resetToDefault();
+        addNotification('Data has been reset to default!', 'info');
         onClose();
     };
 
