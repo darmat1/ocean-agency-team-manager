@@ -25,7 +25,6 @@ export const PersonalInfoTab = ({ member }: PersonalInfoTabProps) => {
       m.id === member.id ? { ...m, ...values } : m
     );
     setMembers(updatedMembers);
-    message.success('Information saved successfully!');
   };
 
   return (

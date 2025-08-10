@@ -2,8 +2,10 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { HomeOutlined, TeamOutlined, RocketOutlined, CloseOutlined } from '@ant-design/icons';
+import { HomeOutlined, TeamOutlined, RocketOutlined, CloseOutlined, ReloadOutlined } from '@ant-design/icons';
 import { FC } from 'react';
+import { useTeam } from '@/hooks/useTeam';
+import { Button } from 'antd';
 
 const navLinks = [
     { name: 'Dashboard', href: '/', icon: <HomeOutlined /> },
@@ -17,7 +19,12 @@ interface SidebarProps {
 
 export const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
     const pathname = usePathname();
+    const { isDataModified, resetToDefault } = useTeam();
 
+    const handleReset = () => {
+        resetToDefault();
+        onClose();
+    };
 
     return (<>
         <div
@@ -63,7 +70,17 @@ export const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
                     })}
                 </ul>
             </nav>
-
+            <div className="mt-auto p-4">
+                {isDataModified && (
+                    <Button
+                        icon={<ReloadOutlined />}
+                        onClick={handleReset}
+                        block
+                    >
+                        Reset Data to Default
+                    </Button>
+                )}
+            </div>
             <div className="p-4 border-t border-gray-200">
                 <p className="text-xs text-center text-gray-500">© 2025 TeamApp Inc.</p>
             </div>
