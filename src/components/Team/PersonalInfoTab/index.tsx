@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { Input, Button, Form, message } from 'antd';
+import { Input, Button, Form } from 'antd';
 import { TeamMember } from '@/lib/types';
 import { useTeam } from '@/hooks/useTeam';
 
