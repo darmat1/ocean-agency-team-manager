@@ -2,6 +2,8 @@
 
 import { createContext, useState, ReactNode, useCallback } from 'react';
 import { CheckCircleOutlined, InfoCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { ModalState } from '@/lib/types';
+import { Modal } from '@/components/Modal';
 
 
 type NotificationType = 'success' | 'info' | 'error';
@@ -12,11 +14,15 @@ interface Notification {
   type: NotificationType;
 }
 
-interface NotificationContextType {
+
+
+interface OverlayContextType {
   addNotification: (message: string, type: NotificationType) => void;
+  showModal: (content: ReactNode, title?: string) => void;
+  hideModal: () => void;
 }
 
-export const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
+export const OverlayContext = createContext<OverlayContextType | undefined>(undefined);
 
 const NotificationContainer = ({ notifications, removeNotification }: { notifications: Notification[], removeNotification: (id: number) => void }) => {
   const icons = {
@@ -26,7 +32,7 @@ const NotificationContainer = ({ notifications, removeNotification }: { notifica
   };
 
   return (
-    <div className="fixed top-5 right-5 z-50 space-y-3">
+    <div className="fixed bottom-5 right-5 z-50 space-y-3">
       {notifications.map(notification => (
         <div
           key={notification.id}
@@ -41,13 +47,22 @@ const NotificationContainer = ({ notifications, removeNotification }: { notifica
   );
 };
 
-export const NotificationProvider = ({ children }: { children: ReactNode }) => {
+export const OverlayProvider = ({ children }: { children: ReactNode }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [modalState, setModalState] = useState<ModalState | null>(null);
 
   const removeNotification = useCallback((id: number) => {
     setNotifications(currentNotifications =>
       currentNotifications.filter(n => n.id !== id)
     );
+  }, []);
+
+  const showModal = useCallback((content: ReactNode, title?: string) => {
+    setModalState({ content, title });
+  }, []);
+
+  const hideModal = useCallback(() => {
+    setModalState(null);
   }, []);
 
   const addNotification = useCallback((message: string, type: NotificationType) => {
@@ -62,10 +77,20 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
     }, 3000);
   }, [removeNotification]);
 
+
+  const contextValue = { addNotification, showModal, hideModal };
   return (
-    <NotificationContext.Provider value={{ addNotification }}>
+    <OverlayContext.Provider value={contextValue}>
       {children}
       <NotificationContainer notifications={notifications} removeNotification={removeNotification} />
-    </NotificationContext.Provider>
+      {modalState && (
+        <Modal
+          onClose={hideModal}
+          title={modalState.title}
+        >
+          {modalState.content}
+        </Modal>
+      )}
+    </OverlayContext.Provider>
   );
 };

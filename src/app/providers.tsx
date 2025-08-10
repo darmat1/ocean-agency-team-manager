@@ -1,6 +1,6 @@
 'use client';
 
-import { NotificationProvider } from '@/context/NotificationProvider';
+import { OverlayProvider } from '@/context/OverlayProvider';
 import { TeamProvider } from '@/context/TeamProvider';
 import StyledComponentsRegistry from '@/lib/AntdRegistry';
 import { App } from 'antd';
@@ -10,9 +10,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <TeamProvider>
             <App>
                 <StyledComponentsRegistry>
-                    <NotificationProvider>
+                    <OverlayProvider>
                         {children}
-                    </NotificationProvider>
+                    </OverlayProvider>
                 </StyledComponentsRegistry>
             </App>
         </TeamProvider>

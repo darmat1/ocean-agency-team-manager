@@ -6,7 +6,7 @@ import { HomeOutlined, TeamOutlined, RocketOutlined, CloseOutlined, ReloadOutlin
 import { FC } from 'react';
 import { useTeam } from '@/hooks/useTeam';
 import { Button } from 'antd';
-import { useNotification } from '@/hooks/useNotification';
+import { useOverlay } from '@/hooks/useOverlay';
 
 const navLinks = [
     { name: 'Dashboard', href: '/', icon: <HomeOutlined /> },
@@ -21,7 +21,7 @@ interface SidebarProps {
 export const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
     const pathname = usePathname();
     const { isDataModified, resetToDefault } = useTeam();
-    const { addNotification } = useNotification();
+    const { addNotification } = useOverlay();
 
     const handleReset = () => {
         resetToDefault();

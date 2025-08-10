@@ -3,6 +3,7 @@
 import { FC, useEffect } from 'react';
 import { Input, Button, Form } from 'antd';
 import { TeamMember } from '@/lib/types';
+import { useOverlay } from '@/hooks/useOverlay';
 
 interface PersonalInfoTabProps {
   member: TeamMember;
@@ -11,7 +12,7 @@ interface PersonalInfoTabProps {
 
 export const PersonalInfoTab: FC<PersonalInfoTabProps> = ({ member, onUpdate }) => {
   const [form] = Form.useForm();
-
+  const { showModal, hideModal, addNotification } = useOverlay();
   useEffect(() => {
     form.setFieldsValue({
       phone: member.phone,
@@ -19,8 +20,31 @@ export const PersonalInfoTab: FC<PersonalInfoTabProps> = ({ member, onUpdate }) 
     });
   }, [member, form]);
 
-  const handleSaveChanges = (values: { phone: string; telegram: string }) => {
-    onUpdate(values);
+//   const handleSaveChanges = (values: { phone: string; telegram: string }) => {
+//     onUpdate(values);
+//   };
+
+const handleSaveChanges = (values: { phone: string; telegram: string }) => {
+    const confirmAction = () => {
+      onUpdate(values);
+      hideModal();
+      addNotification('Personal info updated successfully!', 'success');
+    };
+
+    showModal(
+      <>
+        <p className="text-gray-700">Are you sure you want to save these changes?</p>
+        <div className="flex justify-end space-x-3 mt-6">
+          <Button onClick={hideModal}>
+            Cancel
+          </Button>
+          <Button type="primary" onClick={confirmAction}>
+            Confirm
+          </Button>
+        </div>
+      </>,
+      'Confirm Changes'
+    );
   };
 
   return (

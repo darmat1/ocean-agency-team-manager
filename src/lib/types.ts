@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export type Department = 'Sales' | 'Technical' | 'Finance';
 
 export type MemberStatus = 'active' | 'inactive';
@@ -20,4 +22,10 @@ export interface TeamMember {
   phone: string;
   telegram: string;
   tasks: Task[];
+}
+
+export interface ModalState {
+  content: ReactNode;
+  title?: string;
+  props?: Record<string, unknown>;
 }

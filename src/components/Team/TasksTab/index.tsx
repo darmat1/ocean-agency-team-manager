@@ -5,7 +5,7 @@ import { DragDropContext, DropResult } from '@hello-pangea/dnd';
 import { TeamMember, Task, TaskStatus } from '@/lib/types';
 import { TaskColumn } from '@/components/Team/TaskColumn';
 import { useTeam } from '@/hooks/useTeam';
-import { useNotification } from '@/hooks/useNotification';
+import { useOverlay } from '@/hooks/useOverlay';
 
 interface TasksTabProps {
     member: TeamMember;
@@ -23,7 +23,7 @@ export const TasksTab: FC<TasksTabProps> = ({ member, onUpdateTasks }) => {
     const [tasksByStatus, setTasksByStatus] = useState<Record<TaskStatus, Task[]>>({
         'To Do': [], 'In Progress': [], 'Done': [],
     });
-    const { addNotification } = useNotification();
+    const { addNotification } = useOverlay();
     const [newTaskTitle, setNewTaskTitle] = useState('');
 
     useEffect(() => {

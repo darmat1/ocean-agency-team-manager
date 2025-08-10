@@ -6,11 +6,11 @@ import { UserOutlined, TeamOutlined, SyncOutlined } from '@ant-design/icons';
 import { DepartmentChart, TaskStatusChart } from '@/components/Dashboard';
 import Link from 'next/link';
 import { useTeam } from '@/hooks/useTeam';
-import { useNotification } from '@/hooks/useNotification';
+import { useOverlay } from '@/hooks/useOverlay';
 
 export default function HomePage() {
   const { members, loading, error } = useTeam();
-  const { addNotification } = useNotification();
+  const { addNotification } = useOverlay();
 
   useEffect(() => {
     if (error) {

@@ -8,15 +8,15 @@ import { PersonalInfoTab } from '@/components/Team/PersonalInfoTab';
 import { TasksTab } from '@/components/Team/TasksTab';
 import { Task, TeamMember } from '@/lib/types';
 import { useTeam } from '@/hooks/useTeam';
-import { useNotification } from '@/hooks/useNotification';
 import { PhoneIcon } from '@/components/icons/Phone';
 import { TelegramIcon } from '@/components/icons/Telegram';
+import { useOverlay } from '@/hooks/useOverlay';
 
 const TeamMemberPage = () => {
     const params = useParams();
     const id = params.id as string;
     const { members, setMembers, loading: teamLoading } = useTeam();
-    const { addNotification } = useNotification();
+    const { addNotification } = useOverlay();
 
     // локальний стан поточного користувача (Opitmistic UI)
     const [member, setMember] = useState<TeamMember | null>(null);
@@ -87,16 +87,13 @@ const TeamMemberPage = () => {
         <main className="p-4 md:p-8">
             <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
                 <div className="flex flex-col sm:flex-row items-start gap-6">
-                    {/* Аватар */}
                     <Avatar size={80} src={member.avatar} />
                     
-                    {/* Основна інформація */}
                     <div className="flex-grow">
                         <h1 className="text-3xl font-bold">{member.name}</h1>
                         <p className="text-lg text-gray-500">{member.role}</p>
                         <p className="text-md text-gray-400 mt-1">{member.department} Department</p>
 
-                        {/* Контакти */}
                         <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-4 text-gray-600">
                             <div className="flex items-center gap-2">
                                 <PhoneIcon />
