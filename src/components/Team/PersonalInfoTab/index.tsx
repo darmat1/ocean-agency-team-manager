@@ -1,16 +1,15 @@
 'use client';
 
-import { useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { Input, Button, Form } from 'antd';
 import { TeamMember } from '@/lib/types';
-import { useTeam } from '@/hooks/useTeam';
 
 interface PersonalInfoTabProps {
   member: TeamMember;
+  onUpdate: (data: { phone: string; telegram: string }) => void;
 }
 
-export const PersonalInfoTab = ({ member }: PersonalInfoTabProps) => {
-  const { members, setMembers } = useTeam();
+export const PersonalInfoTab: FC<PersonalInfoTabProps> = ({ member, onUpdate }) => {
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -21,10 +20,7 @@ export const PersonalInfoTab = ({ member }: PersonalInfoTabProps) => {
   }, [member, form]);
 
   const handleSaveChanges = (values: { phone: string; telegram: string }) => {
-    const updatedMembers = members.map(m =>
-      m.id === member.id ? { ...m, ...values } : m
-    );
-    setMembers(updatedMembers);
+    onUpdate(values);
   };
 
   return (

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FC } from 'react';
 import { DragDropContext, DropResult } from '@hello-pangea/dnd';
 import { TeamMember, Task, TaskStatus } from '@/lib/types';
 import { TaskColumn } from '@/components/Team/TaskColumn';
@@ -9,6 +9,7 @@ import { useNotification } from '@/hooks/useNotification';
 
 interface TasksTabProps {
     member: TeamMember;
+    onUpdateTasks: (tasks: Task[]) => void;
 }
 
 const columns: { [key in TaskStatus]: { id: TaskStatus; title: string } } = {
@@ -17,7 +18,7 @@ const columns: { [key in TaskStatus]: { id: TaskStatus; title: string } } = {
     'Done': { id: 'Done', title: 'Done' },
 };
 
-export const TasksTab = ({ member }: TasksTabProps) => {
+export const TasksTab: FC<TasksTabProps> = ({ member, onUpdateTasks }) => {
     const { members, setMembers } = useTeam();
     const [tasksByStatus, setTasksByStatus] = useState<Record<TaskStatus, Task[]>>({
         'To Do': [], 'In Progress': [], 'Done': [],
@@ -56,10 +57,9 @@ export const TasksTab = ({ member }: TasksTabProps) => {
 
         const allUpdatedTasks = Object.values(newTasksState).flat();
 
-        const updatedMembers = members.map(m =>
-            m.id === member.id ? { ...m, tasks: allUpdatedTasks } : m
-        );
-        setMembers(updatedMembers);
+        //відправка оновлених даних в батьківський компонент
+        onUpdateTasks(allUpdatedTasks);
+
         addNotification(`Task "${movedTask.title}" status changed to "${destStatus}"`, 'info');
     };
 
@@ -81,8 +81,12 @@ export const TasksTab = ({ member }: TasksTabProps) => {
                 : m
         );
 
+        //відправка нових даних в бд
         setMembers(updatedMembers);
+
         addNotification('New task added successfully!', 'success');
+
+        //очистка інпута
         setNewTaskTitle('');
     };
 

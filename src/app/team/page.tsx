@@ -35,7 +35,7 @@ export default function TeamPage() {
                 member.name.toLowerCase().includes(searchTerm.toLowerCase())
             );
         }
-        
+
         if (departmentFilter) {
             filteredItems = filteredItems.filter(member =>
                 member.department === departmentFilter
