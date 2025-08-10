@@ -36,3 +36,13 @@ body {
   color: var(--foreground);
   font-family: var(--font-inter);
 }
+
+.ant-btn-link,
+.ant-menu-item a,
+.link-color-inherit a { 
+  color: inherit !important;
+}
+
+a{
+  @apply text-gray-500;
+}

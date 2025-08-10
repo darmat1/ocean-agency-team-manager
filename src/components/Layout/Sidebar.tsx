@@ -40,7 +40,7 @@ export const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
         >
             <div className="h-16 flex items-center justify-between px-4 border-b border-gray-200">
                 <Link href="/" onClick={onClose} className="flex items-center gap-2 text-xl font-bold text-gray-800">
-                    <RocketOutlined className="text-blue-500" />
+                    <RocketOutlined className="text-gray-500" />
                     <span>TeamApp</span>
                 </Link>
                 <button onClick={onClose} className="md:hidden text-gray-500 hover:text-gray-800">
