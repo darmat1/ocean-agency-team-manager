@@ -4,15 +4,17 @@ import { FC, useEffect } from 'react';
 import { Input, Button, Form } from 'antd';
 import { TeamMember } from '@/lib/types';
 import { useOverlay } from '@/hooks/useOverlay';
+import { useTeam } from '@/hooks/useTeam';
+
 
 interface PersonalInfoTabProps {
   member: TeamMember;
-  onUpdate: (data: { phone: string; telegram: string }) => void;
 }
 
-export const PersonalInfoTab: FC<PersonalInfoTabProps> = ({ member, onUpdate }) => {
+export const PersonalInfoTab: FC<PersonalInfoTabProps> = ({ member }) => {
   const [form] = Form.useForm();
   const { showModal, hideModal, addNotification } = useOverlay();
+  const { updateMemberInfo } = useTeam();
   useEffect(() => {
     form.setFieldsValue({
       phone: member.phone,
@@ -20,13 +22,11 @@ export const PersonalInfoTab: FC<PersonalInfoTabProps> = ({ member, onUpdate }) 
     });
   }, [member, form]);
 
-//   const handleSaveChanges = (values: { phone: string; telegram: string }) => {
-//     onUpdate(values);
-//   };
+
 
 const handleSaveChanges = (values: { phone: string; telegram: string }) => {
-    const confirmAction = () => {
-      onUpdate(values);
+    const confirmAction = async () => {
+      await updateMemberInfo(member.id, values);
       hideModal();
       addNotification('Personal info updated successfully!', 'success');
     };

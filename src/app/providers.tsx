@@ -3,18 +3,15 @@
 import { OverlayProvider } from '@/context/OverlayProvider';
 import { TeamProvider } from '@/context/TeamProvider';
 import StyledComponentsRegistry from '@/lib/AntdRegistry';
-import { App } from 'antd';
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export const Providers = ({ children }: { children: React.ReactNode }) => {
     return (
-        <TeamProvider>
-            <App>
+        <OverlayProvider>
+            <TeamProvider>
                 <StyledComponentsRegistry>
-                    <OverlayProvider>
-                        {children}
-                    </OverlayProvider>
+                    {children}
                 </StyledComponentsRegistry>
-            </App>
-        </TeamProvider>
+            </TeamProvider>
+        </OverlayProvider>
     );
 }

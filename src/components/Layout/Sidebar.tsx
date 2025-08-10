@@ -61,7 +61,7 @@ export const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
                                     href={link.href}
                                     onClick={onClose}
                                     className={`flex items-center gap-3 px-4 py-3 my-1 rounded-lg transition-colors ${isActive
-                                        ? 'bg-blue-500 text-white shadow-md'
+                                        ? 'text-orange-950'
                                         : 'text-gray-600 hover:bg-gray-100'
                                         }`}
                                 >

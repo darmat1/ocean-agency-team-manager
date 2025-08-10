@@ -1,90 +1,105 @@
 'use client';
 
-import {
-  createContext,
-  useEffect,
-  useState,
-  ReactNode,
-} from 'react';
-import { TeamMember } from '@/lib/types';
-
+import { createContext, useEffect, useState, ReactNode, useCallback } from 'react';
+import { Task, TeamMember } from '@/lib/types';
+import * as api from '@/lib/api';
 import initialTeamData from '@/../public/data/data.json';
+import { useOverlay } from '@/hooks/useOverlay';
 
 interface TeamContextValue {
-  members: TeamMember[];
-  setMembers: (members: TeamMember[]) => void;
-  loading: boolean;
-  error: string | null;
-  isDataModified: boolean; 
-  resetToDefault: () => void; 
+    members: TeamMember[];
+    loading: boolean;
+    error: string | null;
+    isDataModified: boolean;
+    updateMemberInfo: (memberId: string, data: { phone: string; telegram: string }) => Promise<void>;
+    updateMemberTasks: (memberId: string, tasks: Task[]) => Promise<void>;
+    resetToDefault: () => Promise<void>;
 }
 
 export const TeamContext = createContext<TeamContextValue | undefined>(undefined);
 
 export const TeamProvider = ({ children }: { children: ReactNode }) => {
-  const [members, setMembers] = useState<TeamMember[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [isDataModified, setIsDataModified] = useState(false);
+    const [members, setMembers] = useState<TeamMember[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [isDataModified, setIsDataModified] = useState(false);
+    const { addNotification } = useOverlay();
 
-  useEffect(() => {
-    try {
-      const localDataString = localStorage.getItem('team-members');
-      const defaultDataString = JSON.stringify(initialTeamData);
+    useEffect(() => {
+        setLoading(true);
+        api.fetchTeamMembers()
+            .then(data => {
+                setMembers(data);
+                const defaultDataString = JSON.stringify(initialTeamData);
+                setIsDataModified(JSON.stringify(data) !== defaultDataString);
+            })
+            .catch(setError)
+            .finally(() => setLoading(false));
+    }, []);
 
-      if (localDataString) {
-        const parsedData = JSON.parse(localDataString);
-        if (Array.isArray(parsedData) && parsedData.length > 0) {
-          setMembers(parsedData);
-          setIsDataModified(localDataString !== defaultDataString);
-        } else {
-          setMembers(initialTeamData as TeamMember[]);
-          localStorage.setItem('team-members', defaultDataString);
-          setIsDataModified(false); 
+    const updateMemberInfo = useCallback(async (memberId: string, data: { phone: string; telegram: string }) => {
+        const originalMembers = [...members];
+
+        const updatedMembers = members.map(m =>
+            m.id === memberId ? { ...m, ...data } : m
+        );
+        setMembers(updatedMembers);
+
+        try {
+            await api.saveTeamData(updatedMembers);
+            const defaultDataString = JSON.stringify(initialTeamData);
+            setIsDataModified(JSON.stringify(updatedMembers) !== defaultDataString);
+        } catch (err) {
+            addNotification(typeof err === 'string' ? err : 'Update failed', 'error');
+            setMembers(originalMembers);
         }
-      } else {
-        setMembers(initialTeamData as TeamMember[]);
-        localStorage.setItem('team-members', defaultDataString);
-        setIsDataModified(false); 
-      }
-    } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : 'An unknown error occurred');
-      setMembers(initialTeamData as TeamMember[]);
-      setIsDataModified(false);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    }, [members, addNotification]);
+
+    const resetToDefault = useCallback(async () => {
+        const defaultData = initialTeamData as TeamMember[];
+        setMembers(defaultData);
+        try {
+            await api.saveTeamData(defaultData);
+            setIsDataModified(false);
+            addNotification('Data has been reset to default.', 'success');
+        } catch (err) {
+            addNotification(typeof err === 'string' ? err : 'Reset failed', 'error');
+            //тут в випадку помилки тултіп виводиться, але дані всеодно перезаписуються на дефолтні
+            api.fetchTeamMembers().then(setMembers);
+        }
+    }, [addNotification]);
+
+    const updateMemberTasks = useCallback(async (memberId: string, tasks: Task[]) => {
+        const originalMembers = [...members];
+        //Optimistic UI - оновлення стану до запиту на сервер
+        const updatedMembers = members.map(m =>
+            m.id === memberId ? { ...m, tasks } : m
+        );
+        setMembers(updatedMembers);
+
+        try {
+            await api.saveTeamData(updatedMembers);
+        } catch (err) {
+            //відкат до попереднього стану
+            setMembers(originalMembers);
+            addNotification(typeof err === 'string' ? err : 'Failed to update tasks', 'error');
+        }
+    }, [members, addNotification]);
 
 
-  useEffect(() => {
-
-    if (loading) {
-      return;
-    }
-    
-    const currentDataString = JSON.stringify(members);
-    localStorage.setItem('team-members', currentDataString);
-    const defaultDataString = JSON.stringify(initialTeamData);
-    setIsDataModified(currentDataString !== defaultDataString);
-  }, [members, loading]);
-
-  const resetToDefault = () => {
-    setMembers(initialTeamData as TeamMember[]);
-  };
-
-  return (
-    <TeamContext.Provider
-      value={{
-        members,
-        setMembers,
-        loading,
-        error,
-        isDataModified,
-        resetToDefault,
-      }}
-    >
-      {children}
-    </TeamContext.Provider>
-  );
+    return (
+        <TeamContext.Provider
+            value={{
+                members,
+                loading,
+                error,
+                isDataModified,
+                updateMemberInfo,
+                updateMemberTasks,
+                resetToDefault,
+            }}
+        >
+            {children}
+        </TeamContext.Provider>
+    );
 };

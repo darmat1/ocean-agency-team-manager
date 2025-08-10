@@ -9,7 +9,6 @@ import { useOverlay } from '@/hooks/useOverlay';
 
 interface TasksTabProps {
     member: TeamMember;
-    onUpdateTasks: (tasks: Task[]) => void;
 }
 
 const columns: { [key in TaskStatus]: { id: TaskStatus; title: string } } = {
@@ -18,8 +17,8 @@ const columns: { [key in TaskStatus]: { id: TaskStatus; title: string } } = {
     'Done': { id: 'Done', title: 'Done' },
 };
 
-export const TasksTab: FC<TasksTabProps> = ({ member, onUpdateTasks }) => {
-    const { members, setMembers } = useTeam();
+export const TasksTab: FC<TasksTabProps> = ({ member }) => {
+    const { updateMemberTasks } = useTeam();
     const [tasksByStatus, setTasksByStatus] = useState<Record<TaskStatus, Task[]>>({
         'To Do': [], 'In Progress': [], 'Done': [],
     });
@@ -31,7 +30,11 @@ export const TasksTab: FC<TasksTabProps> = ({ member, onUpdateTasks }) => {
             (acc[task.status] = acc[task.status] || []).push(task);
             return acc;
         }, {} as Record<TaskStatus, Task[]>);
-        setTasksByStatus(groupedTasks);
+        setTasksByStatus({
+            'To Do': groupedTasks['To Do'] || [],
+            'In Progress': groupedTasks['In Progress'] || [],
+            'Done': groupedTasks['Done'] || [],
+        });
     }, [member.tasks]);
 
     const onDragEnd = (result: DropResult) => {
@@ -56,9 +59,7 @@ export const TasksTab: FC<TasksTabProps> = ({ member, onUpdateTasks }) => {
         setTasksByStatus(newTasksState);
 
         const allUpdatedTasks = Object.values(newTasksState).flat();
-
-        //відправка оновлених даних в батьківський компонент
-        onUpdateTasks(allUpdatedTasks);
+        updateMemberTasks(member.id, allUpdatedTasks); 
 
         addNotification(`Task "${movedTask.title}" status changed to "${destStatus}"`, 'info');
     };
@@ -75,14 +76,14 @@ export const TasksTab: FC<TasksTabProps> = ({ member, onUpdateTasks }) => {
             status: 'To Do',
         };
 
-        const updatedMembers = members.map(m =>
-            m.id === member.id
-                ? { ...m, tasks: [...m.tasks, newTask] }
-                : m
-        );
+        const newTotalTasks = [...member.tasks, newTask];
+        updateMemberTasks(member.id, newTotalTasks);
 
-        //відправка нових даних в бд
-        setMembers(updatedMembers);
+        // Optimistic UI
+        setTasksByStatus(prev => ({
+            ...prev,
+            'To Do': [...prev['To Do'], newTask]
+        }));
 
         addNotification('New task added successfully!', 'success');
 
