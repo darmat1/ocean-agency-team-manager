@@ -9,13 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/compatible": "^5.1.4",
     "@ant-design/nextjs-registry": "^1.1.0",
+    "@ant-design/plots": "^2.6.3",
+    "@ant-design/v5-patch-for-react-19": "^1.0.3",
+    "@hello-pangea/dnd": "^18.0.1",
     "antd": "^5.26.7",
     "next": "15.4.6",
     "react": "19.1.0",
-    "react-dnd": "^16.0.1",
-    "react-dnd-html5-backend": "^16.0.1",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "react-responsive": "^10.0.1"
   },
   "devDependencies": {
     "typescript": "^5",

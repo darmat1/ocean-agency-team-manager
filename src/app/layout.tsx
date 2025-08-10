@@ -1,9 +1,11 @@
+import '@ant-design/v5-patch-for-react-19';
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import StyledComponentsRegistry from '@/lib/AntdRegistry';
+import { Providers } from "./providers";
+import { AppLayout } from '@/components/Layout/AppLayout';
 
-const inter = Inter({  variable: "--font-inter", subsets: ["latin"] });
+const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Team Dashboard",
@@ -18,9 +20,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} antialiased`}
+        className={`${inter.variable} antialiased bg-gray-50`}
       >
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        <Providers>
+          <AppLayout>
+            {children}
+          </AppLayout>
+        </Providers>
       </body>
     </html>
   );
