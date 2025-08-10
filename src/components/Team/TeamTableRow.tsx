@@ -1,5 +1,3 @@
-// src/components/Team/TeamTableRow.tsx
-
 import { TeamMember } from '@/lib/types';
 import { FC } from 'react';
 import Image from 'next/image';

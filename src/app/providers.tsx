@@ -2,17 +2,16 @@
 
 import { TeamProvider } from '@/context/TeamProvider';
 import StyledComponentsRegistry from '@/lib/AntdRegistry';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import { App } from 'antd';
 
 export function Providers({ children }: { children: React.ReactNode }) {
-  return (
-    <StyledComponentsRegistry>
-      <DndProvider backend={HTML5Backend}>
+    return (
         <TeamProvider>
-          {children}
+            <App>
+                <StyledComponentsRegistry>
+                    {children}
+                </StyledComponentsRegistry>
+            </App>
         </TeamProvider>
-      </DndProvider>
-    </StyledComponentsRegistry>
-  );
+    );
 }
