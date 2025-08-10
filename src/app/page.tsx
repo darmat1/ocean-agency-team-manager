@@ -36,8 +36,7 @@ export default function HomePage() {
       acc[task.status] = (acc[task.status] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
-    
-    // Преобразуем в формат, который ожидает график
+
     return Object.entries(counts).map(([status, count]) => ({ status, count }));
   }, [members]);
 
@@ -54,24 +53,42 @@ export default function HomePage() {
       <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <Card>
-          <Statistic title="Total Members" value={stats.total} prefix={<TeamOutlined />} />
-        </Card>
-        <Card>
-          <Statistic title="Active Members" value={stats.active} prefix={<UserOutlined />} />
-        </Card>
-        <Card>
-          <Statistic title="Tasks In Progress" value={stats.inProgress} prefix={<SyncOutlined spin />} />
-        </Card>
+        <Link href="/team" className="block">
+          <Card hoverable>
+            <Statistic title="Total Members" value={stats.total} prefix={<TeamOutlined />} />
+          </Card>
+        </Link>
+        <Link href="/team" className="block">
+          <Card hoverable>
+            <Statistic title="Active Members" value={stats.active} prefix={<UserOutlined />} />
+          </Card>
+        </Link>
+        <Link href="/team" className="block">
+          <Card hoverable>
+            <Statistic title="Tasks In Progress" value={stats.inProgress} prefix={<SyncOutlined spin />} />
+          </Card>
+        </Link>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card title="Team Composition" className="lg:col-span-1">
+        <Card
+          title={
+            <Link href="/team" className="hover:underline">
+              Team Composition
+            </Link>
+          }
+          className="lg:col-span-1">
           <DepartmentChart data={departmentData} />
         </Card>
         <Card title="Tasks Overview" className="lg:col-span-2">
           <TaskStatusChart data={taskStatusData} />
         </Card>
-        <Card title="Team Overview" className="lg:col-span-3">
+        <Card
+          title={
+            <Link href="/team" className="hover:underline">
+              Team Overview
+            </Link>
+          }
+          className="lg:col-span-3">
           <List
             itemLayout="horizontal"
             dataSource={members}
