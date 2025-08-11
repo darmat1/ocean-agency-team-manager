@@ -25,7 +25,6 @@ export const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
 
     const handleReset = () => {
         resetToDefault();
-        addNotification('Data has been reset to default!', 'info');
         onClose();
     };
 

@@ -61,7 +61,7 @@ export const TeamProvider = ({ children }: { children: ReactNode }) => {
         try {
             await api.saveTeamData(defaultData);
             setIsDataModified(false);
-            addNotification('Data has been reset to default.', 'success');
+            addNotification('Data has been reset to default.', 'info');
         } catch (err) {
             addNotification(typeof err === 'string' ? err : 'Reset failed', 'error');
             //тут в випадку помилки тултіп виводиться, але дані всеодно перезаписуються на дефолтні
@@ -79,6 +79,8 @@ export const TeamProvider = ({ children }: { children: ReactNode }) => {
 
         try {
             await api.saveTeamData(updatedMembers);
+            const defaultDataString = JSON.stringify(initialTeamData);
+            setIsDataModified(JSON.stringify(updatedMembers) !== defaultDataString);
         } catch (err) {
             //відкат до попереднього стану
             setMembers(originalMembers);
