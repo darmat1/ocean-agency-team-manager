@@ -5,7 +5,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { AppLayout } from '@/components/Layout/AppLayout';
 
-const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
+const inter = Inter({ variable: "--font-inter", subsets: ["latin", "cyrillic"] });
 
 export const metadata: Metadata = {
   title: "Team Dashboard",
