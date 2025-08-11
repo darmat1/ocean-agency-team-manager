@@ -79,6 +79,8 @@ export const TeamProvider = ({ children }: { children: ReactNode }) => {
 
         try {
             await api.saveTeamData(updatedMembers);
+            const defaultDataString = JSON.stringify(initialTeamData);
+            setIsDataModified(JSON.stringify(updatedMembers) !== defaultDataString);
         } catch (err) {
             //відкат до попереднього стану
             setMembers(originalMembers);
